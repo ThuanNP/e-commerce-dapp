@@ -53,3 +53,4 @@ baseline.json
 .husky/_
 
 secret.json
+.DS_Store
