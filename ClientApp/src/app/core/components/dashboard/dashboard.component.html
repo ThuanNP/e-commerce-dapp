@@ -1,0 +1,46 @@
+<div fxLayout="row" fxLayoutAlign="center start">
+
+  <mat-card fxFlex="80">
+
+    <mat-card-title class="text-center">
+      Đồ án môn công nghệ thương mại điện tử
+      <!-- Welcome to FleaMarket Escrow DApp on Ethereum Blockchain -->
+    </mat-card-title>
+
+    <mat-card-content class="text-center">
+      Ứng dụng mua bán sản phẩm - Smart Contract DApp on Ethereum Blockchain
+      <!-- Front-end user interface to FleaMarket Escrow Smart Contract -->
+    </mat-card-content>
+
+    <mat-card-content fxLayout="row" fxLayoutAlign="space-around start">
+
+      <img fxHide.lt-md fxHide-sm src="./assets/img/seller-256.png" @dropPoke>
+
+      <img src="./assets/img/premium-128.png" class='margin-top-58' @shakeHands>
+
+      <img fxHide.lt-md fxHide-sm src="./assets/img/buyer-256.png" @dropPoke>
+
+    </mat-card-content>
+
+    <mat-card-footer fxLayout="row" fxLayoutAlign="space-around start">
+
+      <div class="mat-body-1">Người bán</div>
+
+      <div></div>
+
+      <div class="mat-body-1">Người mua</div>
+
+    </mat-card-footer>
+
+  </mat-card>
+
+</div>
+<div fxLayout="row" fxLayoutAlign="center center"
+  *ngIf="{co: ethereumConnected$ | async, in: ethereumInjected$ | async} as o">
+  <button mat-raised-button class='margin-top-bottom--12' color="accent" *ngIf="!o.co && o.in" (click)="onConnect()">
+    Kết nối đến Blockchain
+  </button>
+  <button mat-raised-button class='margin-top-bottom--12' color="warn" *ngIf="o.co && o.in" (click)="onDisconnect()">
+    Disconnect from Blockchain
+  </button>
+</div>

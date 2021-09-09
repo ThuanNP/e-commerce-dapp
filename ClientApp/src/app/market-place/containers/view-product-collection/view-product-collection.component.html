@@ -1,0 +1,47 @@
+<div fxLayout="row" fxLayoutAlign="center stretch" fxLayoutGap="16px">
+
+
+    <mat-card fxFlex="50">
+
+        <mat-card-subtitle>Danh sách Purchase Contract</mat-card-subtitle>
+
+        <mat-card-content fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-form-field color="accent" fxFlex="80" fxFlex.lt-md="60">
+                <input matInput placeholder="Search for contact by key" #contractKey>
+            </mat-form-field>
+            <div>
+                <!-- create new contract -->
+                <a mat-mini-fab color="warn" style="margin-right: 20px" routerLink='./make/new'
+                    matTooltip="Tạo hợp đồng mới" matTooltipPosition="left">
+                    <mat-icon>add</mat-icon>
+                </a>
+            </div>
+        </mat-card-content>
+
+        <mat-card-content>
+            <app-purchase-contract-list [products]="filteredProducts$ | async"
+                (selectMe)="selectPurchaseContract($event)">
+            </app-purchase-contract-list>
+
+            <p *ngIf="(filteredProducts$ | async)?.length === 0">
+                <!-- Looks like nothing to show yet 😛 -->
+                Có vẻ như chưa có gì để hiển thị 😛
+            </p>
+        </mat-card-content>
+    </mat-card>
+
+
+    <mat-card fxFlex="50">
+        <mat-card-subtitle>Thông tin chi tiết Purchase Contract</mat-card-subtitle>
+
+        <router-outlet></router-outlet>
+
+    </mat-card>
+
+
+
+
+
+
+
+</div>

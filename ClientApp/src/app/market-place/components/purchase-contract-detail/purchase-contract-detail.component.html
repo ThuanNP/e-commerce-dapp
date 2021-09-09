@@ -1,0 +1,136 @@
+<ng-container *ngIf="contract; then selectedTmpl; else noSelectedTmpl">
+</ng-container>
+
+<ng-template #selectedTmpl>
+
+  <mat-card-content>
+    <section fxLayout="row" fxLayoutAlign="start center">
+
+      <h3 class="mat-h3" fxFlex="38" fxFlexOffset="2">Trạng thái:</h3>
+      <mat-chip style="justify-content: center" fxFlex [selected]="true" [color]="statusColors[contract.state].color">
+        {{
+        enumToString(statusColors[contract.state].state)
+        }}</mat-chip>
+
+      <span fxFlex="20" fxFlexOffset="23">
+        <!-- Abort contract by seller -->
+        <button mat-icon-button color="warn" matTooltip="Hủy bỏ hợp đồng bởi người bán" matTooltipPosition="above"
+          (click)="abortMe.emit()" [disabled]="!canAbort">
+          <mat-icon>flash_on</mat-icon>
+        </button>
+        <!-- Remove contract by owner -->
+        <button mat-icon-button color="warn" matTooltip="Xóa hợp đồng bởi chủ sở hữu" matTooltipPosition="above"
+          (click)="remove.emit(contract.productKey)" [disabled]="!removeFromListing">
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+      </span>
+
+    </section>
+
+
+    <section>
+      <mat-list dense>
+        <mat-list-item>
+          <h3 class="mat-h3">Product Key:</h3>
+          <span>{{ contract.productKey }}</span>
+        </mat-list-item>
+
+        <mat-list-item>
+          <h3 class="mat-h3">Product Description</h3>
+          <span>{{ contract.description }}</span>
+        </mat-list-item>
+
+        <!-- 
+        <mat-list-item>
+          <h3 class="mat-h3">Contract Address</h3>
+          <span>{{ contract.contractAddress }}</span>
+        </mat-list-item>
+        -->
+
+        <mat-list-item>
+          <h3 class="mat-h3">Price</h3>
+          <span>{{ contract.price }} ETH</span>
+        </mat-list-item>
+
+        <mat-list-item>
+          <h3 class="mat-h3">Balance</h3>
+          <span>{{ contract.balance }} ETH</span>
+        </mat-list-item>
+
+        <mat-list-item>
+          <h3 class="mat-h3">Seller Address</h3>
+          <span>{{ contract.sellerAddress }}</span>
+        </mat-list-item>
+
+        <mat-list-item *ngIf="contract.buyerAddress">
+          <h3 class="mat-h3">Buyer Address</h3>
+          <span>{{ contract.buyerAddress }}</span>
+        </mat-list-item>
+
+        <mat-list-item *ngIf="showCommission">
+          <h3 class="mat-h3">Commission</h3>
+          <span>{{ contract.commission/10000 | percent: '1.0-2' }}</span>
+        </mat-list-item>
+
+
+      </mat-list>
+    </section>
+
+    <mat-divider></mat-divider>
+
+    <section fxLayout="row" fxLayoutAlign="start center" style="padding: 15px 0px">
+
+      <h3 class="mat-h3" fxFlex="36" fxFlexOffset="2">Product Image</h3>
+      <img #ipfsImage height="120px" width="120px">
+
+    </section>
+
+    <mat-divider></mat-divider>
+
+    <section fxLayout="row wrap" fxLayoutAlign="space-between center" style="margin-top: 10px">
+
+      <mat-form-field appearance="outline" *ngIf="canBuy">
+        <mat-label>Value in ETH. (2X price)</mat-label>
+        <input matInput [formControl]="buyerConfirmPrice" required>
+        <mat-error *ngIf="buyerConfirmPrice.invalid && buyerConfirmPrice.touched">{{validatorError}}</mat-error>
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        <mat-hint>Buyer Confirm Purchase</mat-hint>
+      </mat-form-field>
+
+      <button mat-raised-button color="warn" *ngIf="canBuy"
+        [disabled]="!(buyerConfirmPrice.valid && buyerConfirmPrice.dirty)" (click)="buy.emit(buyerConfirmPrice.value)">
+        Buyer Execute Purchase</button>
+      <button mat-raised-button color="accent" *ngIf="canDelivery" (click)="delivery.emit()">
+        Buyer Confirm Delivery</button>
+      <button mat-raised-button color="primary" matTooltip="Seller click to receive escrow" matTooltipPosition="above"
+        *ngIf="canReleaseEscrow" (click)="releaseEscrow.emit()">
+        Seller Receive Escrow <mat-icon>local_bar</mat-icon>
+      </button>
+      <button mat-raised-button color="primary" matTooltip="Owner click to receive commission"
+        matTooltipPosition="above" *ngIf="canReceiveCommission" (click)="receiveCommission.emit()">
+        Owner Receive Commission <mat-icon>monetization_on</mat-icon>
+      </button>
+
+    </section>
+    <mat-card-footer>
+
+    </mat-card-footer>
+
+  </mat-card-content>
+
+
+</ng-template>
+
+
+
+<ng-template #noSelectedTmpl>
+  <!-- ...Please wait for the contact to load. -->
+  ... Vui lòng đợi hệ thống tải danh hợp đồng.
+</ng-template>
+
+
+
+<!-- 
+  <p>Debug purchase contract details: {{ contract | json }}</p>
+  <p>IPFS image: {{ image }}</p>
+  -->
